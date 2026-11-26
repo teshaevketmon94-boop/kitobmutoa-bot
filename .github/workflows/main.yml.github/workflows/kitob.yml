@@ -1,0 +1,30 @@
+
+name: Kitob Mutoa Bot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * *'
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository ni yuklash
+        uses: actions/checkout@v4
+
+      - name: Python ni sozlash
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Kutubxonalarni o'rnatish
+        run: pip install requests
+
+      - name: Kitob botini ishga tushirish
+        env:
+          KITOB_BOT_TOKEN: ${{ secrets.KITOB_BOT_TOKEN }}
+          KITOB_CHAT_ID: ${{ secrets.KITOB_CHAT_ID }}
+        run: python main.py
+        

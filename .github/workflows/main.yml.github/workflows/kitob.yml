@@ -3,7 +3,7 @@ name: Kitob Mutoa Bot
 
 on:
   workflow_dispatch:
-  schedule:
+  
   
 
 jobs:

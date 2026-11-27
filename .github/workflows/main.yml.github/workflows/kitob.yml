@@ -26,6 +26,6 @@ jobs:
         env:
           KITOB_BOT_TOKEN: ${{ secrets.KITOB_BOT_TOKEN }}
           KITOB_CHAT_ID: ${{ secrets.KITOB_CHAT_ID }}
-                    GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python main.py
         

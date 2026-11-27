@@ -8,7 +8,7 @@ import fitz
 
 TOKEN = os.getenv("KITOB_BOT_TOKEN")
 CHAT_ID = os.getenv("KITOB_CHAT_ID")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 PROGRESS_FILE = "progress.json"
 MODEL = "gemini-3.8-flash"

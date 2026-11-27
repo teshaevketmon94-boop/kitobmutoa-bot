@@ -45,10 +45,7 @@ def save_progress(next_page):
 
 
 def translate_to_uzbek(text):
-    url = (
-        "https://generativelanguage.googleapis.com/"
-        f"v1beta/models/{MODEL}:generateContent"
-    )
+    url = "https://api.groq.com/openai/v1/chat/completions"
 
     prompt = f"""
 Сен рус тилидан ўзбек тилига таржима қилувчи
@@ -60,10 +57,8 @@ def translate_to_uzbek(text):
 Талаблар:
 1. Бирор жумлани ташлаб кетма.
 2. Матнни қисқартирма ва ўзингдан изоҳ қўшма.
-3. Ақидавий ва ҳадисий атамаларни эҳтиёткорлик
-   билан таржима қил.
-4. Арабча оятлар, ҳадислар ва манбаларни
-   асл ҳолича сақла.
+3. Ақидавий ва ҳадисий атамаларни эҳтиёткорлик билан таржима қил.
+4. Арабча оятлар, ҳадислар ва манбаларни асл ҳолича сақла.
 5. Муаллифнинг фикри ва услубини сақла.
 6. Фақат ўзбекча таржимани қайтар.
 
@@ -73,26 +68,29 @@ def translate_to_uzbek(text):
 """
 
     for attempt in range(4):
-        response = requests.post(
-            url,
-            headers={
-                "x-goog-api-key": GEMINI_API_KEY,
-                "Content-Type": "application/json",
-            },
-            json={
-                "contents": [
-                    {
-                        "parts": [
-                            {"text": prompt}
-                        ]
-                    }
-                ],
-                "generationConfig": {
+        try:
+            response = requests.post(
+                url,
+                headers={
+                    "Authorization": f"Bearer {GROQ_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": "openai/gpt-oss-120b",
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": prompt
+                        }
+                    ],
                     "temperature": 0.2
-                }
-            },
-            timeout=180,
-        )
+                },
+                timeout=300,
+            )
+        except (requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError):
+            time.sleep(15 * (attempt + 1))
+            continue
 
         if response.status_code in (429, 500, 502, 503):
             time.sleep(10 * (attempt + 1))
@@ -101,21 +99,19 @@ def translate_to_uzbek(text):
         response.raise_for_status()
         data = response.json()
 
-        candidates = data.get("candidates", [])
-        if not candidates:
-            raise ValueError("Gemini таржима матнини қайтармади")
-
-        parts = candidates[0]["content"]["parts"]
-        result = "".join(
-            part.get("text", "") for part in parts
-        ).strip()
+        result = (
+            data.get("choices", [{}])[0]
+            .get("message", {})
+            .get("content", "")
+            .strip()
+        )
 
         if not result:
-            raise ValueError("Таржима бўш қайтди")
+            raise ValueError("Groq таржима матнини қайтармади")
 
         return result
 
-    raise RuntimeError("Gemini API бир неча марта хатолик берди")
+    raise RuntimeError("Groq API бир неча марта хатолик берди")
 
 
 def split_message(text, limit=3900):

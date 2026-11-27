@@ -4,7 +4,7 @@ name: Kitob Mutoa Bot
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 18 * * *'
+  
 
 jobs:
   send:

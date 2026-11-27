@@ -11,7 +11,7 @@ CHAT_ID = os.getenv("KITOB_CHAT_ID")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 PROGRESS_FILE = "progress.json"
-MODEL = "gemini-3.8-flash"
+
 
 
 def find_pdf():
@@ -76,7 +76,7 @@ def translate_to_uzbek(text):
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": "openai/gpt-oss-120b",
+                    "model": "openai/gpt-oss-20b",
                     "messages": [
                         {
                             "role": "user",
@@ -155,7 +155,7 @@ def send_message(text):
 
 
 def main():
-    if not TOKEN or not CHAT_ID or not GEMINI_API_KEY:
+    if not TOKEN or not CHAT_ID or not GROQ_API_KEY:
         raise ValueError("Керакли API калитлар топилмади")
 
     pdf_file = find_pdf()

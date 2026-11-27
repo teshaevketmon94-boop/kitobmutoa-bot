@@ -20,7 +20,7 @@ jobs:
           python-version: '3.11'
 
       - name: Kutubxonalarni o'rnatish
-        run: pip install requests
+        run: pip install requests pymupdf
 
       - name: Kitob botini ishga tushirish
         env:

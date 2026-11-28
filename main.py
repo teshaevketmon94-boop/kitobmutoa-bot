@@ -77,7 +77,10 @@ def translate_to_uzbek(text):
                 },
                 json={
                     "model": "openai/gpt-oss-20b",
-                    "messages": [
+"reasoning_effort": "low",
+"include_reasoning": False,
+"max_completion_tokens": 8192,
+"messages": [
                         {
                             "role": "user",
                             "content": prompt

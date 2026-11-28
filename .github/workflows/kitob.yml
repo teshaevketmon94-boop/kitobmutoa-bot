@@ -28,15 +28,20 @@ jobs:
         env:
           KITOB_BOT_TOKEN: ${{ secrets.KITOB_BOT_TOKEN }}
           KITOB_CHAT_ID: ${{ secrets.KITOB_CHAT_ID }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python main.py
+      
       - name: Sahifalar hisoblagichini saqlash
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          touch progress.json
-          git add progress.json
-          git diff --cached --quiet || git commit -m "Update book progress"
-          git push
+          if [ -f progress.json ]; then
+            git add progress.json
+            git diff --cached --quiet || git commit -m "Update book progress"
+            git push
+          else
+            echo "progress.json hali yaratilmagan"
+          fi
+          
           

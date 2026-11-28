@@ -107,8 +107,8 @@ def translate_to_uzbek(text):
         )
 
         if not result:
-    print("Groq жавоби:", data)
-    raise ValueError("Groq таржима матнини қайтармади")
+            print("Groq жавоби:", data)
+            raise ValueError("Groq таржима матнини қайтармади")
 
         return result
 
